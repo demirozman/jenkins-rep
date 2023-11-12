@@ -119,7 +119,7 @@ pipeline {
                 """
             }
         }
-
+    }
     post {
         always {
             echo 'Deleting all local images'
@@ -144,4 +144,3 @@ pipeline {
                 sh 'terraform destroy --auto-approve'
         }
     }
-}
