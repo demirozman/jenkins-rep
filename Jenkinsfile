@@ -112,10 +112,11 @@ pipeline {
             echo 'Deleting all local images'
             sh 'docker image prune -af'
         }
-        
-
-
-
+        success {
+            script {
+                slackSend channel: '#class-chat', color: '#a1e043', message: 'arii', teamDomain: 'devops14tr', tokenCredentialId: 'SlakerA'
+            }
+        }
         failure {
 
             echo 'Delete the Image Repository on ECR due to the Failure'
