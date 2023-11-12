@@ -82,7 +82,7 @@
   become: true
   vars:
     container_name: jenkins_postgre
-    image_name: "{{ ecr_registry }}/{{ project_repo }}/{{app_name}}:postgre"
+    image_name: "986035950657.dkr.ecr.us-east-1.amazonaws.co/jenkins/jenkins_todo_app:postgre"
   tasks:
     - name: remove postgre container
       community.docker.docker_container:
@@ -112,7 +112,7 @@
   become: true
   vars:
     container_name: jenkins_nodejs
-    image_name: "{{ ecr_registry }}/{{ project_repo }}/{{app_name}}:nodejs"
+    image_name: "986035950657.dkr.ecr.us-east-1.amazonaws.co/jenkins/jenkins_todo_app:nodejs"
   tasks:
     - name: remove postgre container
       community.docker.docker_container:
@@ -138,7 +138,7 @@
   become: true
   vars:
     container_name: jenkins_react
-    image_name: "{{ ecr_registry }}/{{ project_repo }}/{{app_name}}:react"
+    image_name: "986035950657.dkr.ecr.us-east-1.amazonaws.co/jenkins/jenkins_todo_app:react"
   tasks:
     - name: remove postgre container
       community.docker.docker_container:
