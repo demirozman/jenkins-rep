@@ -134,18 +134,18 @@
     container_name: jenkins_nodejs
     image_name: 986035950657.dkr.ecr.us-east-1.amazonaws.com/jenkins/jenkins_todo_app:nodejs
   tasks:
-    - name: remove postgre container
+    - name: remove nodejs container
       community.docker.docker_container:
         name: "{{ container_name }}"
         state: absent
         force_kill: true
 
-    - name: remove postgre image
+    - name: remove nodejs image
       community.docker.docker_image:
         name: "{{ image_name }}"
         state: absent
 
-    - name: Launch postgresql docker container
+    - name: Launch nodejs docker container
       community.docker.docker_container:
         name: "{{ container_name }}"
         image: "{{ image_name }}"
@@ -160,13 +160,13 @@
     container_name: jenkins_react
     image_name: 986035950657.dkr.ecr.us-east-1.amazonaws.com/jenkins/jenkins_todo_app:react
   tasks:
-    - name: remove postgre container
+    - name: remove react container
       community.docker.docker_container:
         name: "{{ container_name }}"
         state: absent
         force_kill: true
 
-    - name: remove postgre image
+    - name: remove react image
       community.docker.docker_image:
         name: "{{ image_name }}"
         state: absent
