@@ -31,10 +31,10 @@
         name: yum-utils
         state: latest
 
-    - name: Install yum utils
-      ansible.builtin.yum:
-        name: device-mapper-persistent-data
-        state: latest
+    # - name: Install yum utils
+    #   ansible.builtin.yum:
+    #     name: device-mapper-persistent-data
+    #     state: latest
 
     - name: Install yum/dnf utils
       ansible.builtin.dnf:
