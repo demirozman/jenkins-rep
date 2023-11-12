@@ -26,7 +26,7 @@ variable "user" {
 }
 
 resource "aws_instance" "managed_nodes" {
-  ami = "ami-026ebd4cfe2c043b2"
+  ami = "ami-05a5f6298acdb05b6"
   count = 3
   instance_type = "t2.micro"
   key_name = "cenkis"  # change with your pem file
