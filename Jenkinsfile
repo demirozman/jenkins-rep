@@ -85,8 +85,8 @@ pipeline {
                 sh 'ls -l'
                 sh 'ansible --version'
                 sh 'ansible-inventory --graph'
-                ansiblePlaybook credentialsId: 'cenkis', disableHostKeyChecking: true, installation: 'ansible', inventory: 'inventory_aws_ec2.yml', playbook: 'docker_project.yml'
-             }
+                ansiblePlaybook credentialsId: 'cenkis', disableHostKeyChecking: true, installation: 'ansible', inventory: 'inventory_aws_ec2.yml', playbook: 'dockerfile_project.yml', vaultCredentialsId: 'vaulter', vaultTmpPath: ''
+                }
         }
 
         stage('Destroy the infrastructure'){

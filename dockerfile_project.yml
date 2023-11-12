@@ -80,6 +80,8 @@
 - name: postgre database config
   hosts: _ansible_postgresql
   become: true
+  vars_files:
+    - secret.yaml
   vars:
     container_name: jenkins_postgre
     image_name: 986035950657.dkr.ecr.us-east-1.amazonaws.co/jenkins/jenkins_todo_app:postgre
@@ -103,7 +105,7 @@
         ports:
           - "5432:5432"
         env:
-          POSTGRES_PASSWORD: "Pp123456789"
+          POSTGRES_PASSWORD: "{{ password }}"
         volumes:
           - /db-data:/var/lib/postgresql/data
 
