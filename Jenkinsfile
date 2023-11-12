@@ -1,8 +1,8 @@
 pipeline {
     agent any
     tools {
-    ansible 'ansible'
-    terraform 'terraform'
+        ansible 'ansible'
+        terraform 'terraform'
     }
     environment {
         PATH=sh(script:"echo $PATH:/usr/local/bin", returnStdout:true).trim()
@@ -11,7 +11,6 @@ pipeline {
         ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         APP_REPO_NAME = "jenkins/jenkins_todo_app"
     }
-
     stages {
         stage('Create Infrastructure for the App') {
             steps {
@@ -33,7 +32,6 @@ pipeline {
                 '''
             }
         }
-
         stage('Build App Docker Image') {
             steps {
                 echo 'Building App Image'
@@ -57,7 +55,6 @@ pipeline {
                 sh 'docker image ls'
             }
         }
-
         stage('Push Image to ECR Repo') {
             steps {
                 echo 'Pushing App Image to ECR Repo'
@@ -67,7 +64,6 @@ pipeline {
                 sh 'docker push "$ECR_REGISTRY/$APP_REPO_NAME:react"'
             }
         }
-
         stage('wait the instance') {
             steps {
                 script {
@@ -77,7 +73,6 @@ pipeline {
                 }
             }
         }
-
        stage('Deploy the App') {
             steps {
                 echo 'Deploy the App'
@@ -86,8 +81,7 @@ pipeline {
                 sh 'ansible-inventory --graph'
                 ansiblePlaybook credentialsId: 'cenkis', disableHostKeyChecking: true, installation: 'ansible', inventory: 'inventory_aws_ec2', playbook: 'dockerfile_project.yml'
              }
-        }
-
+       }
         stage('Destroy the infrastructure'){
             steps{
                 timeout(time:5, unit:'DAYS'){
@@ -103,7 +97,6 @@ pipeline {
                 """
             }
         }
-
        stage('Destroy the infrastructure'){
             steps{
                 timeout(time:5, unit:'DAYS'){
@@ -118,7 +111,7 @@ pipeline {
                   --force
                 """
             }
-        }
+       }
     }
     post {
         always {
@@ -144,3 +137,4 @@ pipeline {
                 sh 'terraform destroy --auto-approve'
         }
     }
+}
