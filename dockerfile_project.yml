@@ -28,14 +28,23 @@
 
     - name: Install yum utils
       ansible.builtin.yum:
+        name: yum-utils
+        state: latest
+
+    - name: Install yum/dnf utils
+      ansible.builtin.dnf:
         name: "{{ item }}"
         state: latest
       with_items:
-        - yum-utils
         - device-mapper-persistent-data
         - lvm2
         - unzip
-
+    
+    - name: Upgrade all packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+    
     - name: Add Docker repo
       ansible.builtin.get_url:
         url: https://download.docker.com/linux/centos/docker-ce.repo
