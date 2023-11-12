@@ -20,7 +20,6 @@ pipeline {
                 sh 'terraform apply --auto-approve'
             }
         }
-    }
         stage('Create ECR Repo') {
             steps {
                 echo 'Creating ECR Repo for App'
