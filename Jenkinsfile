@@ -11,6 +11,7 @@ pipeline {
         ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         APP_REPO_NAME = "jenkins/jenkins_todo_app"
     }
+
     stages {
         stage('Create Infrastructure for the App') {
             steps {
@@ -19,6 +20,7 @@ pipeline {
                 sh 'terraform apply --auto-approve'
             }
         }
+
         stage('Create ECR Repo') {
             steps {
                 echo 'Creating ECR Repo for App'
@@ -32,6 +34,7 @@ pipeline {
                 '''
             }
         }
+
         stage('Build App Docker Image') {
             steps {
                 echo 'Building App Image'
@@ -55,6 +58,7 @@ pipeline {
                 sh 'docker image ls'
             }
         }
+
         stage('Push Image to ECR Repo') {
             steps {
                 echo 'Pushing App Image to ECR Repo'
@@ -64,6 +68,7 @@ pipeline {
                 sh 'docker push "$ECR_REGISTRY/$APP_REPO_NAME:react"'
             }
         }
+
         stage('wait the instance') {
             steps {
                 script {
@@ -73,15 +78,17 @@ pipeline {
                 }
             }
         }
-       stage('Deploy the App') {
+
+        stage('Deploy the App') {
             steps {
                 echo 'Deploy the App'
                 sh 'ls -l'
                 sh 'ansible --version'
                 sh 'ansible-inventory --graph'
-                ansiblePlaybook credentialsId: 'cenkis', disableHostKeyChecking: true, installation: 'ansible', inventory: 'inventory_aws_ec2', playbook: 'dockerfile_project.yml'
+                ansiblePlaybook credentialsId: 'project-208', disableHostKeyChecking: true, installation: 'ansible', inventory: 'inventory_aws_ec2.yml', playbook: 'docker_project.yml'
              }
-       }
+        }
+
         stage('Destroy the infrastructure'){
             steps{
                 timeout(time:5, unit:'DAYS'){
@@ -97,33 +104,18 @@ pipeline {
                 """
             }
         }
-       stage('Destroy the infrastructure'){
-            steps{
-                timeout(time:5, unit:'DAYS'){
-                    input message:'Approve terminate'
-                }
-                sh """
-                docker image prune -af
-                terraform destroy --auto-approve
-                aws ecr delete-repository \
-                  --repository-name ${APP_REPO_NAME} \
-                  --region ${AWS_REGION} \
-                  --force
-                """
-            }
-       }
+
     }
+
     post {
         always {
             echo 'Deleting all local images'
             sh 'docker image prune -af'
         }
-        //success {
-        //    // One or more steps need to be included within each condition's block.
-        //    script {
-        //        slackSend channel: '#class-chat', color: ' #A1E043' , message: 'DMR Jenkins project is ready and pipeline past successfully. DMR hat schaft Jenkins Project', teamDomain: 'EchoTeam' , tokenCredentialId: 'jenkins-slack'            
-        //    }
-        // }
+        
+
+
+
         failure {
 
             echo 'Delete the Image Repository on ECR due to the Failure'
